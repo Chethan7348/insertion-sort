@@ -1,65 +1,71 @@
-void merge(int arr[], int left, int mid, int right)
-{
-    int i, j, k;
-    int s1 = mid - left + 1;
-    int s2 = right - mid;
- 
-    int left_arr[s1], right_arr[s2];
- 
-    for (i = 0; i < s1; i++)
-        left_arr[i] = arr[left + i];
-    
-    for (j = 0; j < s2; j++)
-        right_arr[j] = arr[mid + 1 + j];
- 
-    i = 0;    
-    j = 0;    
-    k = left; 
-    while (i < s1 && j < s2) {
-        if (left_arr[i] <= right_arr[j]) {
-            arr[k] = left_arr[i];
-            i++;
-        }
-        else {
-            arr[k] = right_arr[j];
-            j++;
-        }
-        k++;
+#include <stdio.h>
+
+void merge(int arr[], int l, int m, int r) {
+  int i = l;
+  int j = m + 1;
+  int k = l;
+  
+  int temp[5];
+  while (i <= m && j <= r) {
+    if (arr[i] <= arr[j]) {
+      temp[k] = arr[i];
+      i++;
+      k++;
+    } else {
+      temp[k] = arr[j];
+      j++;
+      k++;
     }
- 
-    while (i < s1) {
-        arr[k] = left_arr[i];
-        i++;
-        k++;
-    }
- 
-    while (j < s2) {
-        arr[k] = right_arr[j];
-        j++;
-        k++;
-    }
+  }
+  
+  while (i <= m) {
+    temp[k] = arr[i];
+    i++;
+    k++;
+  }
+  
+  while (j <= r) {
+    temp[k] = arr[j];
+    j++;
+    k++;
+  }
+  
+  for (int p = l; p <= r; p++) {
+    arr[p] = temp[p];
+  }
 }
 
-void merge_sort(int arr[], int left, int right)
-{
-    if (left < right) {
-        
-        // finding the mid value of the array. 
-        int mid = l + (right - left) / 2;
- 
-        // Calling the merge sort for the first half
-        merge_sort(arr, left, mid);
-        
-        // Calling the merge sort for the second half
-        merge_sort(arr, mid + 1, right);
- 
-        // Calling the merge function
-        merge(arr, left, mid, right);
-    }
+void mergeSort(int arr[], int l, int r) {
+  if (l < r) {
+    
+    int m = (l + r) / 2;
+    
+    mergeSort(arr, l, m);
+    mergeSort(arr, m + 1, r);
+    
+    merge(arr, l, m, r);
+  }
 }
 
-int main(){
-    int arr[5]; // [90, 66, 67, 32, 1011]
-    
-    merge_sort(arr, 0, 4);
+int main() {
+  int myarray[5];
+  
+  int arr_size = 5;
+  printf("Enter 5 integers in any order: \n");
+  for (int i = 0; i < 5; i++) {
+    scanf("%d", &myarray[i]);
+  }
+  printf("Before Sorting\n");
+  for (int i = 0; i < 5; i++) {
+    printf("%d ", myarray[i]);
+  }
+  printf("\n");
+  mergeSort(myarray, 0, (arr_size - 1)); 
+  printf("After Sorting\n");
+  for (int i = 0; i < 5; i++) {
+    printf("%d ", myarray[i]);
+  }
+  printf("\n");
+  
+  return 0;
 }
